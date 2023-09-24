@@ -21,8 +21,12 @@ import re
 from collections import Counter
 
 
+# def top_10_most_common_words(text: str) -> dict[str, int]:
+#     words = re.findall(r'\b\w{3,}\b', text.lower())
+#     counted_words = list(Counter(words).items())
+#     words_top = sorted(counted_words, key=lambda word: (-word[1], word[0]))
+#     return dict(words_top[:10])
+
 def top_10_most_common_words(text: str) -> dict[str, int]:
     words = re.findall(r'\b\w{3,}\b', text.lower())
-    counted_words = list(Counter(words).items())
-    words_top = sorted(counted_words, key=lambda word: (-word[1], word[0]))
-    return dict(words_top[:10])
+    return dict(Counter(sorted(words)).most_common(10))

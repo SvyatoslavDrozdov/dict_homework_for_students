@@ -21,6 +21,7 @@
 
 import os
 from decimal import Decimal
+from types import MappingProxyType
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SPLIT_SYMBOL = '\n'
@@ -41,21 +42,28 @@ def get_employees_info() -> list[str]:
 
 def get_parsed_employees_info() -> list[dict[str, int | str]]:
     employees_info = get_employees_info()
-    our_keys = {"id", "name", "last_name", "age", "salary", "position"}
     parsed_employees_info = []
-    keys = []
-    values = []
+    dictionary_sample = {
+        'id': int,
+        'age': int,
+        'name': str,
+        'salary': Decimal,
+        'position': str,
+        'last_name': str
+    }
+    dictionary_sample = MappingProxyType(dictionary_sample)
     for employees in employees_info:
         employees = employees.split(" ")
+        employees_dict = {}
         for words_number in range(0, len(employees) // 2):
             key = employees[2 * words_number]
-            if key in our_keys:
-                value = employees[2 * words_number + 1]
-                if key == "age" or key == "id":
-                    value = int(value)
-                if key == "salary":
-                    value = Decimal(value)
-                keys.append(key)
-                values.append(value)
-        parsed_employees_info.append({k: v for k, v in zip(keys, values)})
+            value = employees[2 * words_number + 1]
+            my_type = dictionary_sample.get(key)
+            if my_type:
+                value = my_type(value)
+                employees_dict[key] = value
+        parsed_employees_info.append(employees_dict)
     return parsed_employees_info
+
+
+print(get_parsed_employees_info())
