@@ -64,6 +64,3 @@ def get_parsed_employees_info() -> list[dict[str, int | str]]:
                 employees_dict[key] = value
         parsed_employees_info.append(employees_dict)
     return parsed_employees_info
-
-
-print(get_parsed_employees_info())
