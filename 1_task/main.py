@@ -22,7 +22,6 @@
 import os
 from decimal import Decimal
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SPLIT_SYMBOL = '\n'
 
@@ -41,9 +40,22 @@ def get_employees_info() -> list[str]:
 
 
 def get_parsed_employees_info() -> list[dict[str, int | str]]:
-    """Функция парсит данные, полученные из внешнего API и приводит их к стандартизированному виду."""
     employees_info = get_employees_info()
+    our_keys = {"id", "name", "last_name", "age", "salary", "position"}
     parsed_employees_info = []
-
-    # Ваш код ниже
+    keys = []
+    values = []
+    for employees in employees_info:
+        employees = employees.split(" ")
+        for words_number in range(0, len(employees) // 2):
+            key = employees[2 * words_number]
+            if key in our_keys:
+                value = employees[2 * words_number + 1]
+                if key == "age" or key == "id":
+                    value = int(value)
+                if key == "salary":
+                    value = Decimal(value)
+                keys.append(key)
+                values.append(value)
+        parsed_employees_info.append({k: v for k, v in zip(keys, values)})
     return parsed_employees_info

@@ -17,15 +17,12 @@
 для тестирования запустить pytest 2_task/test.py
 """
 
+import re
+from collections import Counter
+
 
 def top_10_most_common_words(text: str) -> dict[str, int]:
-    """Функция возвращает топ 10 слов, встречающихся в тексте.
-
-    Args:
-        text: исходный текст
-
-    Returns:
-        словарь типа {слово: количество вхождений}
-    """
-    most_common = {}
-    return most_common
+    words = re.findall(r'\b\w{3,}\b', text.lower())
+    counted_words = list(Counter(words).items())
+    words_top = sorted(counted_words, key=lambda word: (-word[1], word[0]))
+    return dict(words_top[:10])
